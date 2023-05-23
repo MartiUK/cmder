@@ -1,0 +1,88 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+name: Build Cmder
+
+# Controls when the action will run. Triggers the workflow on push or pull request events but only for the main branch
+on:
+  push:
+    branches: [ "master" ]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [ "master" ]
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+env:
+  # Path to the root of the Cmder project.
+  CMDER_ROOT: ${{ github.workspace }}
+
+permissions:
+  contents: read
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  build:
+    name: Build Project
+    runs-on: windows-latest
+
+    steps:
+    - name: Check out repository code (Action from GitHub)
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build Cmder Launcher
+      shell: pwsh
+      working-directory: scripts
+      run: .\build.ps1 -Compile -verbose
+
+    - name: Pack the built files
+      shell: pwsh
+      working-directory: scripts
+      run: .\pack.ps1 -verbose
+
+    - name: Upload artifact (cmder.zip)
+      uses: actions/upload-artifact@v3
+      with:
+        path: build/cmder.zip
+        name: cmder.zip
+        if-no-files-found: error
+
+    - name: Upload artifact (cmder.7z)
+      uses: actions/upload-artifact@v3
+      with:
+        path: build/cmder.7z
+        name: cmder.7z
+
+    - name: Upload artifact (cmder_mini.zip)
+      uses: actions/upload-artifact@v3
+      with:
+        path: build/cmder_mini.zip
+        name: cmder_mini.zip
+
+    - name: Upload artifact (hashes.txt)
+      uses: actions/upload-artifact@v3
+      with:
+        path: build/hashes.txt
+        name: hashes.txt
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          build/cmder.zip
+          build/cmder.7z
+          build/cmder_mini.zip
+          build/hashes.txt
+        draft: true
+        generate_release_notes: true
+      if: startsWith(github.ref, 'refs/tags/')

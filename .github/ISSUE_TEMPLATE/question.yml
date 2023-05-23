@@ -1,0 +1,45 @@
+name: "❓ Question"
+description: Something is unclear or needs to be discussed
+title: "Question: "
+labels: "❔ Type: Question"
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before you ask your question, please make sure you read and follow the following instructions carefully.
+
+        - Read both the README.md and the Wiki, as well as the existing issues:
+
+          | **README.md** | **Wiki** | **Issues** |
+          | ------------- | -------- | ---------- |
+          | 🌐 [Open Link](https://github.com/cmderdev/cmder/blob/master/README.md) | 🌐 [Open Link](https://github.com/cmderdev/cmder/wiki) | 🗃 [Open Link](https://github.com/cmderdev/cmder/issues?q=is:issue) |
+
+          (What you may be asking here could already be explained there!)
+
+        - If you would like to ask for guides on how to integrate Cmder with your favorite IDE of choice, or how to perform a specific task with Cmder, make sure you visit our label section first.
+
+          You may already have an answer under the [💬 Guides](https://github.com/cmderdev/cmder/issues?q=label%3A%22%F0%9F%92%AC+Type%3A+Guide%22), [📖 Documentation](https://github.com/cmderdev/cmder/issues?q=label%3A%22%F0%9F%93%96+Documentation%22) or [❔ Questions](https://github.com/cmderdev/cmder/issues?q=is%3Aissue+label%3A%22%E2%9D%94+Type%3A+Question%22) section.
+
+          For a list of labels, visit **[Labels](https://github.com/cmderdev/cmder/labels)**.
+
+          (Be sure to also check “Closed” issues in the labels section!)
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Question
+      description: What would you to ask about Cmder?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Please check all boxes that apply
+      options:
+        - label: I have read the documentation and made sure what I'm looking for isn't present, or is unclear.
+          required: true
+        - label: I have searched for similar issues, and either this question wasn't asked before, or I didn't find any that describe my question.
+          required: true
